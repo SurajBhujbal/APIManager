@@ -26,7 +26,7 @@ public class APIManager: @unchecked Sendable,Request {
         self.session = session
     }
     
-    public func request<T>(endPoint urlString: String, HttpMethod method: HTTPMethod, Parameter: [String : Any]?, header: [String : String]?, completion: @escaping @Sendable (Result<T, any Error>) -> Void) where T : Decodable, T : Sendable {
+    public func request<T>(endPoint urlString: String, HttpMethod method: HTTPMethod = .GET, Parameter: [String : Any]? = nil, header: [String : String]? = nil, completion: @escaping @Sendable (Result<T, any Error>) -> Void) where T : Decodable, T : Sendable {
         
         guard let url = URL(string: urlString) else{
             completion(.failure(NSError(domain: "Invalid URL", code: 400, userInfo: nil)))
