@@ -13,7 +13,7 @@ public class APIManager: @unchecked Sendable {
         self.session = session
     }
     
-    public func request<T:Decodable>(endPoint urlString:String,HttpMethod method:String = "GET",Parameter:[String:Any]? = nil,header:[String:Any]? = nil , completion: @escaping @Sendable (Result<T, Error>) -> Void){
+    public func request<T:Decodable & Sendable>(endPoint urlString:String,HttpMethod method:String = "GET",Parameter:[String:Any]? = nil,header:[String:Any]? = nil , completion: @escaping  @Sendable (Result<T, Error>) -> Void){
         guard let url = URL(string: urlString) else{
             completion(.failure(NSError(domain: "Invalid URL", code: 400, userInfo: nil)))
             return
@@ -30,8 +30,11 @@ public class APIManager: @unchecked Sendable {
         
         if let parameter = Parameter, method != "GET"{
             do{
-                request.httpBody = try? JSONSerialization.data(withJSONObject: parameter, options: [])
+                request.httpBody = try JSONSerialization.data(withJSONObject: parameter, options: [])
                 request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+            }catch {
+                completion(.failure(error))
+                return
             }
         }
         
