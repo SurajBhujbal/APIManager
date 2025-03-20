@@ -26,7 +26,9 @@ Your model must conform to `Decodable & Sendable`.
 ### **Step 2️⃣: Import APIManager**
 Make sure you import APIManager in your Swift file.
 
-**import APIManager**
+```swift
+import APIManager
+```
 
 ### **Step 3️⃣: Make an API Call**
 Call an API using APIManager.shared.request.
