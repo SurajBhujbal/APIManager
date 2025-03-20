@@ -16,10 +16,12 @@ APIManager is a lightweight and easy-to-use API calling framework in Swift.
 ### **Step 1️⃣: Define a Model**
 Your model must conform to `Decodable & Sendable`.
 
-### ** struct UserModel: Decodable, Sendable {
+
+ **struct UserModel: Decodable, Sendable {**
+ `swift
  let id: Int
  let name: String
-}
+}`
 
 
 ### **Step 2️⃣: Import APIManager**
@@ -30,16 +32,21 @@ Make sure you import APIManager in your Swift file.
 ### **Step 3️⃣: Make an API Call**
 Call an API using APIManager.shared.request.
 
-func Call(){
-**APIManager.shared.request(endPoint: "https://api.example.com/user") {** 
-    (res: Result<UserModel, Error>) in
-    switch res {
-    case .success(let data):
-        print("✅ Success:", data)
-        // Bind your data here...!
-    case .failure(let error):
-        print("❌ Error:", error.localizedDescription)
+## 📌 Example API Call
+
+You can make an API request using `APIManager.shared.request` like this:
+
+`swift
+func Call() {
+    APIManager.shared.request(endPoint: "https://api.example.com/user") { 
+        (res: Result<UserModel, Error>) in
+        switch res {
+        case .success(let data):
+            print("✅ Success:", data)
+            // Bind your data here...!
+        case .failure(let error):
+            print("❌ Error:", error.localizedDescription)
+        }
     }
-  }
-}
+}`
 
