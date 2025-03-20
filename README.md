@@ -16,9 +16,8 @@ APIManager is a lightweight and easy-to-use API calling framework in Swift.
 ### **Step 1️⃣: Define a Model**
 Your model must conform to `Decodable & Sendable`.
 
-
- **struct UserModel: Decodable, Sendable {**
- ```swift
+```swift
+ struct UserModel: Decodable, Sendable {
  let id: Int
  let name: String
 }
