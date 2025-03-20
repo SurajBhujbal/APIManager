@@ -4,7 +4,20 @@
 
 import Foundation
 
-public class APIManager: @unchecked Sendable {
+public protocol Request {
+    func request<T: Decodable & Sendable>(
+        endPoint urlString: String,
+        HttpMethod method: HTTPMethod,
+        Parameter: [String: Any]?,
+        header: [String: String]?, // Changed Any to String for safety
+        completion: @escaping @Sendable (Result<T, Error>) -> Void
+    )
+}
+
+public class APIManager: @unchecked Sendable,Request {
+   
+        
+    
     
      public static let shared = APIManager()
     private let session:URLSession
@@ -13,14 +26,15 @@ public class APIManager: @unchecked Sendable {
         self.session = session
     }
     
-    public func request<T:Decodable & Sendable>(endPoint urlString:String,HttpMethod method:String = "GET",Parameter:[String:Any]? = nil,header:[String:Any]? = nil , completion: @escaping  @Sendable (Result<T, Error>) -> Void){
+    public func request<T>(endPoint urlString: String, HttpMethod method: HTTPMethod, Parameter: [String : Any]?, header: [String : String]?, completion: @escaping @Sendable (Result<T, any Error>) -> Void) where T : Decodable, T : Sendable {
+        
         guard let url = URL(string: urlString) else{
             completion(.failure(NSError(domain: "Invalid URL", code: 400, userInfo: nil)))
             return
         }
         
         var request = URLRequest(url: url,cachePolicy: .reloadIgnoringCacheData)
-        request.httpMethod = method
+        request.httpMethod = method.rawValue
         
         if let header = header{
             for (key,value) in header{
@@ -28,7 +42,7 @@ public class APIManager: @unchecked Sendable {
             }
         }
         
-        if let parameter = Parameter, method != "GET"{
+        if let parameter = Parameter, method != .GET{
             do{
                 request.httpBody = try JSONSerialization.data(withJSONObject: parameter, options: [])
                 request.setValue("application/json", forHTTPHeaderField: "Content-Type")
