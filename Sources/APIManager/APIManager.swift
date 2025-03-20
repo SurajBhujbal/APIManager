@@ -15,11 +15,8 @@ public protocol Request {
 }
 
 public class APIManager: @unchecked Sendable,Request {
-   
-        
-    
-    
-     public static let shared = APIManager()
+
+    public static let shared = APIManager()
     private let session:URLSession
     
     private init (session:URLSession = .shared){
